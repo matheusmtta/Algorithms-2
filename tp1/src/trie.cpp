@@ -81,11 +81,9 @@ bool Trie::add_string(string str, bool is_last){
 		}
 	}
 	
-	char eof = (char)-1;
-	if (is_last) {
-		cout << last_id << " " << eof << endl;
+	char eof = (char)4;
+	if (is_last) 
 		add_compression_tuple(last_id, eof);
-	}
 
 	return true;
 }
@@ -110,11 +108,8 @@ void compress(string input_path, string output_path){
 	string str, chain;
 	
 	infile.unsetf(std::ios_base::skipws);
-	while (infile >> next_ch){
-		if ((int)next_ch > 10)
-			str += string(1, next_ch);
-	}
-	cout << str << endl;
+	while (infile >> next_ch)
+ 		str += string(1, next_ch); 
 
 	for (int i = 0; i < (int)str.size(); i++){
 		bool is_last = i == (int)str.size() - 1 ? true : false;
@@ -125,16 +120,12 @@ void compress(string input_path, string output_path){
 			chain = "";
 	}
 
+	char eof = (char)4;
 	for (pair<int, char> tuple : trie.compression_tuple){
 		outfile.write((char *)(&tuple.first), 4);
-		outfile.write((char *)(&tuple.second), 1);
+		if (tuple.second != eof)
+			outfile.write((char *)(&tuple.second), 1);
 	}
-
-	// for (pair<int, char> tuple : trie.compression_tuple){
-	// 	outfile << '(' << tuple.first << ',' << tuple.second << ')';
-	// 	cout << '(' << tuple.first << ',' << tuple.second << ')';
-	// }
-	// cout << endl;
 
 	infile.close();
 	outfile.close();
@@ -164,15 +155,17 @@ void decompress(string input_path, string output_path){
 	int* code = (int*) new int;
     char* ch = (char*) new char;
 	infile.unsetf(std::ios_base::skipws);
-	//while (infile >> garb >> code >> garb >> ch >> garb){
-	while(infile.read((char *)code, 4) && infile.read(ch, 1)){
+	while(infile.read((char *)code, 4)){
 		string next_string = "";
-		next_string += *ch;
+		if (!infile.read(ch, 1))
+			next_string += "";
+		else
+			next_string += *ch;
 
 		decomp_hash[(int)decomp_hash.size()] = {*code, *ch};
 
 		while (*code != 0){
-			next_string += decomp_hash[*code].second;
+				next_string += decomp_hash[*code].second;
 			*code = decomp_hash[*code].first;
 		}
 		reverse(next_string.begin(), next_string.end());
@@ -180,7 +173,6 @@ void decompress(string input_path, string output_path){
 		recoveredstr += next_string;
 	}
 
-	cerr << recoveredstr << endl;
 	outfile << recoveredstr;
 
 	delete code;

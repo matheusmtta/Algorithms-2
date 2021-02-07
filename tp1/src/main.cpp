@@ -26,12 +26,12 @@ int main(int argc, char const* argv[]){
 	if (command == "-c"){
 		cout << "File compress running..." << endl;
 		compress(input_path, output_path);
-		cout << "Decompressed file saved in " << output_path << endl;
+		cout << "Compressed file saved in " << output_path << endl;
 	}
 	else if (command == "-x"){
 		cout << "File decompress running..." << endl;
 		decompress(input_path, output_path);
-		cout << "Decompressed file saved in: " << output_path << endl;
+		cout << "Decompressed file saved in " << output_path << endl;
 	}
 	else
 		cout << "Undefined command" << endl;

@@ -1,7 +1,7 @@
 CC=g++
 CFLAGS=-Wall -Wextra -fsanitize=address,undefined -fno-omit-frame-pointer -g
 EXEC=./main
-LIBS=`pkg-config --cflags --libs gumbo`
+LIBS=`pkg-config --cflags`
 BIN = bin
 
 $(EXEC): src/main.cpp $(BIN)/trie.o
