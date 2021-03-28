@@ -1,0 +1,10 @@
+echo -e "_____________________________________________________\n"
+for i in {0..9}; do
+echo -e "Compression/Descompression TEST ${i}:\n"
+./main -c in_${i}.txt -o out_${i}.z78
+echo -e ' '
+./main -x out_${i}.z78 -o dec_${i}.txt
+echo -e " "
+diff -sq in_${i}.txt dec_${i}.txt
+echo -e "_____________________________________________________\n"
+done
